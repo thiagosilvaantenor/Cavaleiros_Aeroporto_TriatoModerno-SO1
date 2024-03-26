@@ -45,7 +45,8 @@ public class CavaleiroController extends Thread {
 		}
 
 		System.out.println(
-				"Cavaleiro #" + idCavaleiro + " andou por " + distanciaPercorrida + " metros de " + distanciaCorredor);
+				"Cavaleiro #" + idCavaleiro + " andou por " + distanciaPercorrida + 
+				" metros de " + distanciaCorredor);
 
 	}
 
@@ -85,7 +86,7 @@ public class CavaleiroController extends Thread {
 		try {
 			semaforo.acquire();
 			System.out.println("4 portas aparecem!");
-			// escolha = 1 |-| 4
+			// escolha = 1 |-|	 4
 			escolha = (int) ((Math.random() * 4) + 1);
 			while (portas[escolha - 1] != 0) {
 				escolha = (int) ((Math.random() * 4) + 1);
@@ -99,6 +100,7 @@ public class CavaleiroController extends Thread {
 			}
 
 		} catch (InterruptedException e) {
+			System.err.println(e.getMessage());
 		} finally {
 			semaforo.release();
 		}
