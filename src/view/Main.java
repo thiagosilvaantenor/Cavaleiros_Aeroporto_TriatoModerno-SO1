@@ -4,6 +4,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.swing.JOptionPane;
 
+import controller.AviaoController;
 import controller.CavaleiroController;
 
 public class Main {
@@ -32,7 +33,13 @@ public class Main {
 
 				break;
 			case 2:
-				JOptionPane.showMessageDialog(null, "Exercício ainda em construção!");
+				JOptionPane.showMessageDialog(null, "O resultado será mostrado no terminal");
+				for(int i = 1; i <= 12; i++) {
+					int pista = (int) ((Math.random() * 2)+1); 
+					AviaoController aviao = new AviaoController(pista, i, semaforo);
+					aviao.start();
+				}
+				
 				break;
 			case 9:
 				JOptionPane.showMessageDialog(null, "Saindo...");

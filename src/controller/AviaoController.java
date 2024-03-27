@@ -3,11 +3,11 @@ package controller;
 import java.util.concurrent.Semaphore;
 
 public class AviaoController extends Thread {
-	private String pistaAeroporto;
+	private int pistaAeroporto;
 	private int aviaoId;
 	private Semaphore semaforo;
 	
-	public AviaoController(String pistaAeroporto, int aviaoId, Semaphore semaforo) {
+	public AviaoController(int pistaAeroporto, int aviaoId, Semaphore semaforo) {
 		this.pistaAeroporto = pistaAeroporto;
 		this.aviaoId = aviaoId;
 		this.semaforo = semaforo;
@@ -16,33 +16,93 @@ public class AviaoController extends Thread {
 	@Override
 	public void run() {
 		//4 fases de decolagem (taxiar, decolagem e afastamento da área).
-		try {
-			semaforo.acquire();
-			manobrar();
-		} catch (InterruptedException e) {
-			System.err.println(e.getMessage());
-		}finally {
-			semaforo.release();			
+		verificaPista();
+	}
+	
+	private void verificaPista() {
+		switch(this.pistaAeroporto) {
+		// pistaAeroporto 1 = norte || pistaAeroporto 2 = sul
+		case 1:
+			try {
+				semaforo.acquire();
+				System.out.println("O aviao #" + this.aviaoId + " iniciou os processos para "
+						+ "decolagem na pista norte!");
+				String pista = "norte";
+				manobrar(pista);
+			} catch (InterruptedException e) {
+				System.err.println(e.getMessage());
+			}finally {
+				semaforo.release();			
+			}
+		break;
+		case 2:
+			try {
+				semaforo.acquire();
+				System.out.println("O aviao #" + this.aviaoId + " iniciou os processos para "
+						+ "decolagem na pista sul!");
+				String pista = "sul";
+				manobrar(pista);
+			} catch (InterruptedException e) {
+				System.err.println(e.getMessage());
+			}finally {
+				semaforo.release();			
+			}
+		break;
+			default: System.err.println("Pista do aeroporto inexistente!");
+			break;
 		}
 	}
 
-	private void manobrar() {
+	private void manobrar(String pista) {
 		//300 a 700 milisegundos
-		taxiar();
+		System.out.println("O aviao #" + this.aviaoId +" está na fase de manobra na pista " 
+				+ pista);
+		try {
+			sleep((int)(Math.random() * 701)+300);
+		} catch (InterruptedException e) {
+			System.err.println(e.getMessage());
+		}
+		taxiar(pista);
 	}
-	private void taxiar() {
+	private void taxiar(String pista) {
 		//500 a 1000 milisegundos
-		decolagem();
-		afastamentoDaArea();
+		
+		System.out.println("O aviao #" + this.aviaoId +" está na fase de taxiar na pista "
+				+ pista);
+		try {
+			sleep((int)(Math.random() * 1001)+500);
+		} catch (InterruptedException e) {
+			System.err.println(e.getMessage());
+		}
+		decolagem(pista);
+		
 	}
 
-	private void afastamentoDaArea() {
-		//600 a 800 milisegundos
-	}
-
-	private void decolagem() {
+	private void decolagem(String pista) {
 		//300 a 800 milisegundos
+		System.out.println("O aviao #" + this.aviaoId +" está na fase de decolagem na pista "
+				+ pista);
+		try {
+			sleep((int)(Math.random() * 801)+300);
+		} catch (InterruptedException e) {
+			System.err.println(e.getMessage());
+		}
+		afastamentoDaArea(pista);
 	}
+
+	private void afastamentoDaArea(String pista) {
+		//600 a 800 milisegundos
+		System.out.println("O aviao #" + this.aviaoId +" está na fase de afastamento da area na pista "
+				+ pista);
+		try {
+			sleep((int)(Math.random() * 801)+600);
+		} catch (InterruptedException e) {
+			System.err.println(e.getMessage());
+		}
+
+		System.out.println("O aviao #" + this.aviaoId + " decolou da pista " + pista);
+	}
+
 	
 	
 	
