@@ -33,10 +33,11 @@ public class Main {
 
 				break;
 			case 2:
+				Semaphore semaforoS = new Semaphore(1);
 				JOptionPane.showMessageDialog(null, "O resultado será mostrado no terminal");
 				for(int i = 1; i <= 12; i++) {
 					int pista = (int) ((Math.random() * 2)+1); 
-					AviaoController aviao = new AviaoController(pista, i, semaforo);
+					AviaoController aviao = new AviaoController(pista, i, semaforo, semaforoS);
 					aviao.start();
 				}
 				

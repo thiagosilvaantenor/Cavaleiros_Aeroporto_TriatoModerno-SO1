@@ -5,12 +5,13 @@ import java.util.concurrent.Semaphore;
 public class AviaoController extends Thread {
 	private int pistaAeroporto;
 	private int aviaoId;
-	private Semaphore semaforo;
+	private Semaphore semaforoN, semaforoS;
 	
-	public AviaoController(int pistaAeroporto, int aviaoId, Semaphore semaforo) {
+	public AviaoController(int pistaAeroporto, int aviaoId, Semaphore semaforoN, Semaphore semaforoS) {
 		this.pistaAeroporto = pistaAeroporto;
 		this.aviaoId = aviaoId;
-		this.semaforo = semaforo;
+		this.semaforoN = semaforoN;
+		this.semaforoS = semaforoS;
 	}
 	
 	@Override
@@ -24,7 +25,7 @@ public class AviaoController extends Thread {
 		// pistaAeroporto 1 = norte || pistaAeroporto 2 = sul
 		case 1:
 			try {
-				semaforo.acquire();
+				semaforoN.acquire();
 				System.out.println("O aviao #" + this.aviaoId + " iniciou os processos para "
 						+ "decolagem na pista norte!");
 				String pista = "norte";
@@ -32,12 +33,13 @@ public class AviaoController extends Thread {
 			} catch (InterruptedException e) {
 				System.err.println(e.getMessage());
 			}finally {
-				semaforo.release();			
+				semaforoN.release();			
 			}
-		break;
+			
+			break;
 		case 2:
 			try {
-				semaforo.acquire();
+				semaforoS.acquire();
 				System.out.println("O aviao #" + this.aviaoId + " iniciou os processos para "
 						+ "decolagem na pista sul!");
 				String pista = "sul";
@@ -45,10 +47,11 @@ public class AviaoController extends Thread {
 			} catch (InterruptedException e) {
 				System.err.println(e.getMessage());
 			}finally {
-				semaforo.release();			
+				semaforoN.release();			
 			}
-		break;
-			default: System.err.println("Pista do aeroporto inexistente!");
+			break;
+			
+		default: System.err.println("Pista do aeroporto inexistente!");
 			break;
 		}
 	}
